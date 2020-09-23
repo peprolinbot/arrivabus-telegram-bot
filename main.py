@@ -227,7 +227,7 @@ def about(update, context): #/about command
 *La información proporcionada por este bot puede no ser exacta al 100%* por motivos técnicos propios o ajenos, por lo que su uso no ofrece ninguna garantía.
 
 Creado en Ferrol con ❤️, [Python](https://www.python.org/), [python-telegram-bot](https://python-telegram-bot.org/), [SQLite](https://sqlite.org/) y otras fantásticas herramientas y librerías. Inspirado en [VigoBusBot](https://t.me/vigobusbot).
-😺[Repositorio GitHub del proyecto](https://github.com/peprolinbot/dooropener-telegram)
+😺[Repositorio GitHub del proyecto](https://github.com/peprolinbot/arrivabus-telegram-bot)
 
 ☕️¡Ayuda a mantener este bot en funcionamiento! /donate
 
