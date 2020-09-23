@@ -1,4 +1,4 @@
- # VigoBus-TelegramBot
+ # ArrivaBus-TelegramBot
 
 [![@arrivabusbot](https://img.shields.io/badge/Stable%20bot-@arrivabusbot-blue?logo=telegram&style=plastic)](https://telegram.me/arrivabusbot)
 
