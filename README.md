@@ -1,6 +1,6 @@
  # VigoBus-TelegramBot
 
-[![@arrivabusbot](https://img.shields.io/badge/Stable%20bot-@varrivabusbot-blue?logo=telegram&style=plastic)](https://telegram.me/arrivabusbot)
+[![@arrivabusbot](https://img.shields.io/badge/Stable%20bot-@arrivabusbot-blue?logo=telegram&style=plastic)](https://telegram.me/arrivabusbot)
 
 Telegram Bot that serves you info about teh buses from the Arriva Galicia company.
 
