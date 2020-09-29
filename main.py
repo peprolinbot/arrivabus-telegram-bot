@@ -156,7 +156,7 @@ class userSpecificMenu:
 
 
 mainMenu = simpleMenu([[KeyboardButton("♥️Paradas favoritas")],
-                        [KeyboardButton("🔍Buscar")]], "Elige que quieres hacer:")
+                        [KeyboardButton("🔍Resultados")]], "Elige que quieres hacer:")
 
 allFavoriteStopsMenu = userSpecificMenu(mainDb.getFavoritesStopsNames, "Elige una parada:", [KeyboardButton("⬅️Atrás")])
 
@@ -242,6 +242,7 @@ Además, ciertas aplicaciones no oficiales, sin sufrir ningún gasto en servidor
 Cualquier aportación es de gran ayuda para sufragar el coste que supone mantener el servidor y, por tanto, el bot en funcionamiento, y así mantener este y otros proyectos a flote.
 😊¡Gracias!
 [PayPal](https://www.paypal.me/peprolinbot)
+[BuyMeACofee](https://www.buymeacoffee.com/peprolinbot)
     ''')
 
 def result(update, context): #/result command
@@ -323,7 +324,7 @@ def selectStop(update, context, text=None):
     if insertedInto == "originStopId":
         bot.send_message(chat_id=update.effective_chat.id, text="✅Parada fijada como origen.")
     elif insertedInto == "destStopId":
-        bot.send_message(chat_id=update.effective_chat.id, text="✅Parada fijada como destino. Si no quieres las paradas para el día de hoy, selecciona la fecha con /setDate Día-mes-año. Usa /result o el botón \"Buscar\" para ver los viajes disponibles.")
+        bot.send_message(chat_id=update.effective_chat.id, text="✅Parada fijada como destino. Si no quieres las paradas para el día de hoy, selecciona la fecha con /setDate Día-mes-año. Usa /result o el botón \"Resultados\" para ver los viajes disponibles.")
     elif insertedInto == "date":
         mainDb.removeExpedition(update.effective_chat.id)
         bot.send_message(chat_id=update.effective_chat.id, text="❌Ya has puesto todos los valores. Para las fechas se usa /setDate")
@@ -338,7 +339,7 @@ def selectDate(update, context, date=None):
         bot.send_message(chat_id=update.effective_chat.id, text="❌Vuelve a intentarlo después de haber puesto una prada de origen y una de destino.")
         return
     if insertedInto == "date":
-        bot.send_message(chat_id=update.effective_chat.id, text="✅Fecha fijada. Usa /result o el botón \"Buscar\" para ver los viajes disponibles")
+        bot.send_message(chat_id=update.effective_chat.id, text="✅Fecha fijada. Usa /result o el botón \"Resultados\" para ver los viajes disponibles")
     else:
         mainDb.removeExpedition(update.effective_chat.id)
         bot.send_message(chat_id=update.effective_chat.id, text="❌Vuelve a intentarlo después de haber puesto una prada de origen y una de destino.")
@@ -376,7 +377,7 @@ selectDateHandler = CommandHandler('setDate', selectDate)
 searchHandler = CommandHandler('search', search)
 resultHandler = CommandHandler('result', result)
 
-btnSearchBusesHandler = MessageHandler(Filters.regex(r"^"+"🔍Buscar"+"$"), result)
+btnSearchBusesHandler = MessageHandler(Filters.regex(r"^"+"🔍Resultados"+"$"), result)
 btnFavoriteStopsHandler = MessageHandler(Filters.regex(r"^"+"♥️Paradas favoritas"+"$"), allFavoriteStopsMenu.send)
 btnBackHandler = MessageHandler(Filters.regex(r"^"+"⬅️Atrás"+"$"), mainMenu.send)
 allMsgHandler = MessageHandler(Filters.all, textManager)
