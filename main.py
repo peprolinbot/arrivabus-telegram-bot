@@ -156,9 +156,9 @@ class userSpecificMenu:
 
 
 mainMenu = simpleMenu([[KeyboardButton("♥️Paradas favoritas")],
-                        [KeyboardButton("🔍Resultados")]], "Elige que quieres hacer:")
+                        [KeyboardButton("🔍Resultados")]], "❓Elige que quieres hacer:")
 
-allFavoriteStopsMenu = userSpecificMenu(mainDb.getFavoritesStopsNames, "Elige una parada:", [KeyboardButton("⬅️Atrás")])
+allFavoriteStopsMenu = userSpecificMenu(mainDb.getFavoritesStopsNames, "❓Elige una parada:", [KeyboardButton("⬅️Atrás")])
 
 
 def generateExpeditionsText(expeditionsJson, idaOrOrigen):
@@ -214,11 +214,12 @@ Cuando hagas click sobre una parada, puedes eliminarla haciendo click en el bot�
 ℹ️Lista completa de comandos disponibles
 🔸Búsqueda de paradas: envía el nombre de una parada directamente, o precedido por /search
 🔸/result: muestra las rutas disponibles con lso parámetros especificados
-🔸/setDate: Fija la el día del que quieres obtener los buses
+🔸/setDate: fija la el día del que quieres obtener los buses
+🔸/clear: borra el destino, origen y fecha que hayas fijado para la ruta
 🔸/borrar_todo: borra todos tus datos (paradas guardadas) del bot
 🔸/help: este comando
 🔸/about: información sobre el bot
-🔸/donate: ¿cómo puedes colaborar con el mantenimiento de este bot?''')
+🔸/donate: ¿Cómo puedes colaborar con el mantenimiento de este bot?''')
 
 def about(update, context): #/about command
     context.bot.sendMessage(chat_id=update.effective_chat.id, parse_mode=telegram.ParseMode.MARKDOWN, disable_web_page_preview=True, text='''
@@ -248,9 +249,12 @@ Cualquier aportación es de gran ayuda para sufragar el coste que supone mantene
 def result(update, context): #/result command
     values=mainDb.getExpeditionValues(update.effective_chat.id)
     if values == None:
-        context.bot.sendMessage(chat_id=update.effective_chat.id, text="❌No se espicificó la ruta. Hazlo con el menú del teclado o mandandome su nombre. Para más información manda /help") 
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text="❌No se espicificó la ruta. Hazlo con el menú del teclado o mandándome el nombre de una parada. Para más información manda /help") 
         return
-    if len(values) == 3:
+    elif len(values) == 1:
+        context.bot.sendMessage(chat_id=update.effective_chat.id, text="❌No se espicificó la ruta al completo. Pon un destino usando el menú del teclado o mandándome el nombre de una parada. Para más información manda /help") 
+        return
+    elif len(values) == 3:
         values[2] = datetime.strptime(values[2], "%d-%m-%Y")
     expeditionsJson = arrivapi.getExpeditions(*values)
     mainDb.removeExpedition(update.effective_chat.id) 
@@ -322,12 +326,12 @@ def selectStop(update, context, text=None):
         text= ' '.join(text)
     insertedInto = mainDb.autoInsertToExpedition(update.effective_chat.id, text)
     if insertedInto == "originStopId":
-        bot.send_message(chat_id=update.effective_chat.id, text="✅Parada fijada como origen.")
+        mainMenu.send(update, context, presentationText="✅Parada fijada como origen.")
     elif insertedInto == "destStopId":
-        bot.send_message(chat_id=update.effective_chat.id, text="✅Parada fijada como destino. Si no quieres las paradas para el día de hoy, selecciona la fecha con /setDate Día-mes-año. Usa /result o el botón \"Resultados\" para ver los viajes disponibles.")
+        mainMenu.send(update, context, presentationText="✅Parada fijada como destino. Si no quieres las paradas para el día de hoy, selecciona la fecha con /setDate Día-mes-año. Usa /result o el botón \"Resultados\" para ver los viajes disponibles.")
     elif insertedInto == "date":
         mainDb.removeExpedition(update.effective_chat.id)
-        bot.send_message(chat_id=update.effective_chat.id, text="❌Ya has puesto todos los valores. Para las fechas se usa /setDate")
+        mainMenu.send(update, context, presentationText="❌Ya has puesto todos los valores. Para las fechas se usa /setDate. Vuelve a programar la ruta.")
 
 def selectDate(update, context, date=None):
     if date == None:
@@ -343,6 +347,10 @@ def selectDate(update, context, date=None):
     else:
         mainDb.removeExpedition(update.effective_chat.id)
         bot.send_message(chat_id=update.effective_chat.id, text="❌Vuelve a intentarlo después de haber puesto una prada de origen y una de destino.")
+
+def clearExpedition(update, context):
+    mainDb.removeExpedition(update.effective_chat.id)
+    bot.send_message(chat_id=update.effective_chat.id, text="✅Eliminada la ruta actual.")
 
 def addFavorite(update, context, stopName=None):
     if stopName == None:
@@ -376,6 +384,7 @@ selectDateHandler = CommandHandler('setDate', selectDate)
 # rmFavoriteHandler = CommandHandler('rmFavorite', rmFavorite)
 searchHandler = CommandHandler('search', search)
 resultHandler = CommandHandler('result', result)
+clearHandler = CommandHandler('clear', clearExpedition)
 
 btnSearchBusesHandler = MessageHandler(Filters.regex(r"^"+"🔍Resultados"+"$"), result)
 btnFavoriteStopsHandler = MessageHandler(Filters.regex(r"^"+"♥️Paradas favoritas"+"$"), allFavoriteStopsMenu.send)
@@ -401,6 +410,7 @@ dispatcher.add_handler(selectDateHandler)
 # dispatcher.add_handler(rmFavoriteHandler)
 dispatcher.add_handler(searchHandler)
 dispatcher.add_handler(resultHandler)
+dispatcher.add_handler(clearHandler)
 dispatcher.add_handler(btnSearchBusesHandler)
 dispatcher.add_handler(btnFavoriteStopsHandler)
 dispatcher.add_handler(btnBackHandler)
