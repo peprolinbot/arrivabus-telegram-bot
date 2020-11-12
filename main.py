@@ -173,8 +173,8 @@ def generateExpeditionsText(expeditionsJson, idaOrOrigen):
     result = [""]
     resultCount=0
     for expedition in expeditionsJson[idaOrOrigen]:
-        expeditionStart = datetime.strptime(expedition["hora_salida"], "%Y-%m-%dT%H:%M:%S+02:00")
-        expeditionEnd = datetime.strptime(expedition["hora_llegada"], "%Y-%m-%dT%H:%M:%S+02:00")
+        expeditionStart = datetime.strptime(expedition["hora_salida"][:-6], "%Y-%m-%dT%H:%M:%S")
+        expeditionEnd = datetime.strptime(expedition["hora_llegada"][:-6], "%Y-%m-%dT%H:%M:%S")
         expeditionDuration = timedelta(hours=expeditionStart.hour, minutes=expeditionStart.minute) - timedelta(hours=expeditionEnd.hour, minutes=expeditionEnd.minute)
         for expeditionStop in expedition["parada_expediciones"]:
             arriveTime = timedelta(hours=int(expeditionStop["horaSalida"].split(":")[0]), minutes=int(expeditionStop["horaSalida"].split(":")[1])) + expeditionDuration
