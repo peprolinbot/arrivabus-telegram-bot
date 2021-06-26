@@ -1,4 +1,5 @@
  # ArrivaBus-TelegramBot
+# WARNING: This project has been deprecated in favor of [bus.gal-telegram](https://github.com/peprolinbot/bus.gal-telegram). This *should* still work
 
 [![@arrivabusbot](https://img.shields.io/badge/Stable%20bot-@arrivabusbot-blue?logo=telegram&style=plastic)](https://telegram.me/arrivabusbot)
 
